@@ -3,6 +3,8 @@ import { useState } from "react"
 import {Grid,Button,TextField, Avatar} from "@mui/material"
 import { postData } from "../Services/FetchNodeServices"
 import Swal from "sweetalert2"
+import Heading from "./ProjectComponents/Heading"
+import categoryicon from "../../src/assets/category.png"
 import { makeStyles } from "@mui/styles"
 var useStyles=makeStyles({
 root:{
@@ -89,6 +91,7 @@ export default function Category(){
          <div className={useStyle.box}>
          <Grid container spacing={3}>
            <Grid item xs={12}>
+            <Heading image={categoryicon} caption="New Category" link='/displayallcategory'/>
            <TextField
            value={categoryName} onFocus={()=>handleError('','categoryName')}
             onChange={(event)=>setCategoryName(event.target.value)} 

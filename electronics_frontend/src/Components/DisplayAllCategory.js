@@ -5,9 +5,11 @@ import {Grid,TextField, Avatar} from "@mui/material"
 import { postData } from "../Services/FetchNodeServices"
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Swal from "sweetalert2"
+import categoryimg from '../../src/assets/category.png'
 import { getData,serverURL } from "../Services/FetchNodeServices";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import zIndex from "@mui/material/styles/zIndex";
+import {useNavigate} from "react-router-dom"
 var useStyles=makeStyles({
 reportRoot:{
     width:'100vw',
@@ -46,6 +48,7 @@ right:{
 export default function DisplayAllCategory()
 {
 var classes=useStyles()
+var navigate=useNavigate()
 const [category,setCategory]=useState([])
 const [open,setOpen]=useState(false)
 
@@ -277,7 +280,16 @@ const showCategoryDialog=()=>{
     function displayCategory() {
         return (
           <MaterialTable
-            title="Category List"
+            title={
+              <div style={{display:'flex',flexDirection:'row'}} >
+              <div>
+                  <img src={categoryimg} width="30"/>
+              </div>
+              <div style={{fontFamily:'kanit',fontsize:25,fontWeight:'bold', paddingLeft:7}}>
+                  Category List
+              </div>
+              </div>
+            }
             columns={[
               { title: 'Category Id', field: 'categoryid' },
               { title: 'Category Name', field: 'categoryname' },
@@ -294,6 +306,12 @@ const showCategoryDialog=()=>{
                 icon: 'delete',
                 tooltip: 'Delete Category',
                 onClick: (event, rowData) => handleDelete(rowData)
+              },
+              {
+                icon: 'add',
+                tooltip: 'Add Category',
+                isFreeAction: true,
+                onClick: (event) => navigate("/category")
               }
             ]}
           />
