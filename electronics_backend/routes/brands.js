@@ -43,7 +43,7 @@ router.get('/display_all_brands',function(req,res,next){
 
 router.post('/edit_brands_data',function(req, res, next) {
     try{
-     pool.query('update brands set  categoryid = ?,categoryname=?, brandname = ?, where brandid = ?' ,[req.body.categoryid,req.body.categoryname,req.body.brandname,req.body.brandid],function(error,result){
+     pool.query('update brands set  categoryid = ?, brandname = ? where brandid = ?' ,[req.body.categoryid,req.body.brandname,req.body.brandid],function(error,result){
          if(error)
          {
              res.status(200).json({status:false,message:'Database error,pls contact database admin'})
@@ -79,4 +79,24 @@ router.post('/edit_brand_logo',upload.single('logo'),function(req, res, next) {
      res.status(200).json({status:false,message:'Server Error...'})
  }
  });
+
+ router.post('/fetch_brands_by_category',function(req,res,next){
+    try{
+       pool.query('select B.*, (select C.categoryname from category C where C.categoryid = B.categoryid) as categoryname from brands B where B.categoryid=?',[req.body.categoryid],function(error,result){
+            if(error)
+            {
+                res.status(200).json({status:false,message:'Database error,pls contact database admin'})
+            }
+            else
+            {
+                res.status(200).json({data:result,status:true,message:'Success'})
+            }
+        })
+    }
+    catch(e)
+    {
+        res.status(200).json({status:false,message:'Server Error...'})
+    }
+})
+
 module.exports = router;
