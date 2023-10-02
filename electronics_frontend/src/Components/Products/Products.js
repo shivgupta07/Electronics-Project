@@ -152,7 +152,7 @@ export default function Products(){
            <div className={classes.box}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Heading image={productimg} caption="Products"/>
+                    <Heading image={productimg} caption="Products" link='/displayallproducts'/>
                 </Grid>
                 <Grid item xs={6}>
         <FormControl fullWidth>

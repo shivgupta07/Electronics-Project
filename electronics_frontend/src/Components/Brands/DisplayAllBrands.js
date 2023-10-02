@@ -116,7 +116,7 @@ const handleSubmit=async()=>{
     var error=validation()
     if (error==false)
     {
-    var body={categoryid:categoryId,categoryname:categoryName,brandname:brandName,brandid:brandId,}
+    var body={categoryid:categoryId,categoryname:categoryName,brandname:brandName,brandid:brandId}
   var response=await postData('brands/edit_brand_data',body)
     if(response.status)
     {
@@ -292,6 +292,36 @@ return(
       
         )
       }
+
+      const handleDelete=(rowData)=>{
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(async(result) => {
+          if (result.isConfirmed) {
+            var result=await postData('brands/delete_brand',{brandid:rowData.brandid})
+            if (result.status)
+           { Swal.fire(
+              'Deleted!',
+              'Brand has been deleted.',
+              'success'
+            )
+            fetchAllBrands()
+          }
+          else
+          { Swal.fire(
+            'Failed!',
+            'Fail to delete Brand',
+            'error'
+          )
+        }}
+        })
+      }
       
     function displayBrands() {
         
@@ -316,7 +346,7 @@ return(
               {
                 icon: 'delete',
                 tooltip: 'Delete Brands',
-                onClick: (event, rowData) => alert("You saved " + rowData.name)
+                onClick: (event, rowData) => handleDelete(rowData)
               },
               {
                 icon: 'add',
