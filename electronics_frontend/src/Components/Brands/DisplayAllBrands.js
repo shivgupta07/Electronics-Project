@@ -144,7 +144,6 @@ const handleSubmit=async()=>{
 const handleOpen=(rowData)=>{
 setBrandName(rowData.brandname)
 setBrandId(rowData.brandid)
-setCategoryName(rowData.categoryname)
 setCategoryId(rowData.categoryid)
 setLogo({filename:`${serverURL}/images/${rowData.logo}`,bytes:''})
 setTempPicture(`${serverURL}/images/${rowData.logo}`)
