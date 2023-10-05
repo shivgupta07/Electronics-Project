@@ -71,7 +71,7 @@ useEffect(function(){
     const [categoryName,setCategoryName]=useState('')
     const [categoryList,setCategoryList]=useState([])
     const [brandId,setBrandId]=useState()
-    const [brandName,setBrandnName]=useState('')
+    const [brandName,setBrandName]=useState('')
     const [brandList,setBrandList]=useState([])
     const [errors,setErrors]=useState({})
     const[productName,setProductName]=useState('')
@@ -80,6 +80,7 @@ useEffect(function(){
     const [tempPicture,setTempPicture]=useState('')
     const [statusCamera,setStatusCamera]=useState(false)
     const [statusBtn,setStatusBtn]=useState(false)
+    const [brandinitial, setbrandinitial] = useState(true)
 
 const handleError=(error,label)=>{
     setErrors((prev)=>({...prev,[label]:error}))
@@ -143,10 +144,16 @@ const fillAllBrands=()=>{
 }
 
 const handleCategoryChange=(event)=>{
+  setbrandinitial(false)
+  setBrandId('')
+  setBrandName('')
   setCategoryId(event.target.value)
   fetchBrandsByCategory(event.target.value)
 }
 
+const fillinitialBrand = () => {
+  return <MenuItem value={brandId}>{brandName}</MenuItem>
+}
 
 const productForm=()=>{
     return(
@@ -198,6 +205,7 @@ const productForm=()=>{
           onFocus={()=>handleError('','brandId')}
               helperText={errors.brandId}
         >
+          {brandinitial ? fillinitialBrand() : <></>}
           {fillAllBrands()}
         </Select>
         <FormHelperText style={{color:'#b71540'}}>{errors.brandId}</FormHelperText>
@@ -213,14 +221,6 @@ const productForm=()=>{
                 helperText={errors.productName}
                 label="Product Name" fullWidth/>
               </Grid>
-
-              
-           
-
-           
-
-
-
             </Grid>
            </div>
         </div>
@@ -229,6 +229,7 @@ const productForm=()=>{
 
 const handleOpen=(rowData)=>{
 setCategoryId(rowData.categoryid)
+fetchBrandsByCategory(rowData.categoryid)
 setBrandId(rowData.brandid)
 setProductId(rowData.productid)
 setProductName(rowData.productname)
@@ -291,7 +292,7 @@ const handleSubmit=async()=>{
     if (val==false)
     {
 
-  var body={categoryid:categoryId,categoryname:categoryName,brandid:brandId,brandname:brandName,productid:productId,productname:productName}
+  var body={categoryid:categoryId,brandid:brandId,productid:productId,productname:productName}
   var response=await postData('products/edit_product_data',body)
     if(response.status)
     {

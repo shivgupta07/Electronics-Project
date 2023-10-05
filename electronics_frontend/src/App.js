@@ -5,6 +5,7 @@ import Brands from "./Components/Brands/brands"
 import DisplayAllBrands from "./Components/Brands/DisplayAllBrands";
 import Products from "./Components/Products/Products"
 import DisplayAllProducts from "./Components/Products/DisplayAllProducts";
+import ProductDetails from "./Components/ProductDetails/ProductDetails";
 function App() {
   return (<div>
      <Router>
@@ -15,6 +16,7 @@ function App() {
         <Route element={<DisplayAllBrands/>} path="/displayallbrands"/>
         <Route element={<Products/>} path="/products"/>
         <Route element={<DisplayAllProducts/>} path="/displayallproducts"/>
+        <Route element={<ProductDetails/>} path="/productdetails"/>
       </Routes>
      </Router>
   </div>);
