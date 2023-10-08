@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react"
-import { Grid,TextField,Button,Select,FormControl,InputLabel,FormHelperText,MenuItem,Avatar } from "@mui/material"
+import { Grid,TextField,Button,Select,FormControl,InputLabel,FormHelperText,MenuItem,Avatar,FormControlLabel,Radio,RadioGroup, FormLabel } from "@mui/material"
 import { makeStyles } from "@mui/styles"
 import Swal from "sweetalert2"
 import { getData,postData } from "../../Services/FetchNodeServices"
@@ -16,7 +16,7 @@ var useStyles=makeStyles({
         justifyContent:'center',
     },
     box:{
-        width:500,
+        width:700,
         height:'auto',
         background:'#f1f2f6',
         padding:10,
@@ -141,7 +141,7 @@ var useStyles=makeStyles({
          setPicture({bytes:event.target.files[0],filename:URL.createObjectURL(event.target.files[0])})
         }
     
-       /* const handleSubmit=async()=>{
+        const handleSubmit=async()=>{
             var val=validation()
             if (val==false)
             {
@@ -151,7 +151,7 @@ var useStyles=makeStyles({
           formData.append('categoryid', categoryId)
           formData.append('brandid', brandId)
     
-          var response=await postData('products/submit_products',formData)
+          var response=await postData('productdetails/submit_productdetails',formData)
             if(response.status)
             {
                 Swal.fire({
@@ -178,7 +178,7 @@ var useStyles=makeStyles({
     
         const handleReset=()=>{
             
-        } */
+        } 
 
         return(
             <div className={classes.root}>
@@ -241,8 +241,82 @@ var useStyles=makeStyles({
           </FormControl>
                         </Grid>
     
-                   
-    
+                        <Grid item xs={4}>
+                <TextField
+                value={modelNo}
+                onChange={(event)=>setModelNo(event.target.value)}
+                onFocus={()=>handleError('','modelNo')}
+                error={errors.modelNo}
+                helperText={errors.modelNo}
+                label="Model No" fullWidth/>
+              </Grid>
+
+              <Grid item xs={4}>
+                <TextField
+                value={color}
+                onChange={(event)=>setColor(event.target.value)}
+                onFocus={()=>handleError('','color')}
+                error={errors.color}
+                helperText={errors.color}
+                label="Color" fullWidth/>
+              </Grid>
+
+              <Grid item xs={4}>
+                <TextField
+                value={hsnCode}
+                onChange={(event)=>setHsnCode(event.target.value)}
+                onFocus={()=>handleError('','hsnCode')}
+                error={errors.hsnCode}
+                helperText={errors.hsnCode}
+                label="HSN Code" fullWidth/>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TextField
+                value={price}
+                onChange={(event)=>setPrice(event.target.value)}
+                onFocus={()=>handleError('','price')}
+                error={errors.price}
+                helperText={errors.price}
+                label="Price" fullWidth/>
+              </Grid>
+
+              <Grid item xs={6}>
+                <TextField
+                value={offerPrice}
+                onChange={(event)=>setOfferPrice(event.target.value)}
+                onFocus={()=>handleError('','offerPrice')}
+                error={errors.offerPrice}
+                helperText={errors.offerPrice}
+                label="Offer Price" fullWidth/>
+              </Grid>
+
+                     
+              <Grid item xs={6}>
+                <TextField
+                value={stock}
+                onChange={(event)=>setStock(event.target.value)}
+                onFocus={()=>handleError('','stock')}
+                error={errors.stock}
+                helperText={errors.stock}
+                label="Stock" fullWidth/>
+              </Grid>
+
+              <Grid item xs={6}>
+                        <FormControl>
+                            <FormLabel>Status</FormLabel>
+                            <RadioGroup row value={status} onChange={(event) => setStatus(event.target.value)}>
+                                <FormControlLabel value='continue' control={<Radio />} label="Continue" />
+                                <FormControlLabel value='discontinue' control={<Radio />} label="Discountinue" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+
+
+              
+
+
+            
                 </Grid>
                </div>
             </div>
