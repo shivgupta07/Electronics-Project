@@ -84,11 +84,11 @@ router.post('/edit_brand_logo',upload.single('logo'),function(req, res, next) {
     try{
        pool.query('select B.*, (select C.categoryname from category C where C.categoryid = B.categoryid) as categoryname from brands B where B.categoryid=?',[req.body.categoryid],function(error,result){
             if(error)
-            {
+            {  console.log(error);
                 res.status(200).json({status:false,message:'Database error,pls contact database admin'})
             }
             else
-            {
+            {console.log('yyyyy',result);
                 res.status(200).json({data:result,status:true,message:'Success'})
             }
         })

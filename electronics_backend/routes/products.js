@@ -100,4 +100,25 @@ router.post('/edit_product_data',function(req, res, next) {
  }
  });
 
+
+ router.post('/fetch_products_by_brands',function(req,res,next){
+    try{
+       pool.query("select * from products where categoryid=? and brandid=?",[req.body.categoryid,req.body.brandid],function(error,result){
+            if(error)
+            {    console.log(error)
+                res.status(200).json({status:false,message:'Database error,pls contact database admin'})
+            }
+            else
+            {    console.log("xxxxxxxxxxx",result);
+                res.status(200).json({data:result,status:true,message:'Success'})
+            }
+        })
+    }
+    catch(e)
+    {
+        res.status(200).json({status:false,message:'Server Error...'})
+    }
+})
+
+
 module.exports = router;
