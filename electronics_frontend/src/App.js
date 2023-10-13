@@ -6,6 +6,7 @@ import DisplayAllBrands from "./Components/Brands/DisplayAllBrands";
 import Products from "./Components/Products/Products"
 import DisplayAllProducts from "./Components/Products/DisplayAllProducts";
 import ProductDetails from "./Components/ProductDetails/ProductDetails";
+import DisplayAllProductsDetails from "./Components/ProductDetails/DisplayAllProductsDetails";
 function App() {
   return (<div>
      <Router>
@@ -17,6 +18,7 @@ function App() {
         <Route element={<Products/>} path="/products"/>
         <Route element={<DisplayAllProducts/>} path="/displayallproducts"/>
         <Route element={<ProductDetails/>} path="/productdetails"/>
+        <Route element={<DisplayAllProductsDetails/>} path="/displayallproductsdetails"/>
       </Routes>
      </Router>
   </div>);

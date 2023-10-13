@@ -6,7 +6,10 @@ import { getData,postData } from "../../Services/FetchNodeServices"
 import Heading from "../ProjectComponents/Heading"
 import productimg from "../../assets/category.png"
 import list from "../../assets/list.png"
-
+import ReactQuill from "react-quill"
+import 'react-quill/dist/quill.snow.css';
+import { useMemo } from "react"
+import { DropzoneArea } from "material-ui-dropzone"
 
 var useStyles=makeStyles({
     root:{
@@ -16,7 +19,7 @@ var useStyles=makeStyles({
         justifyContent:'center',
     },
     box:{
-        width:700,
+        width:800,
         height:'auto',
         background:'#f1f2f6',
         padding:10,
@@ -48,7 +51,29 @@ var useStyles=makeStyles({
         const[status,setStatus]=useState('')
         const[modelNo,setModelNo]=useState('')
         const[hsnCode,setHsnCode]=useState('')
-        const [picture,setPicture]=useState({bytes:'',filename:''})
+        const[files,setFiles]=useState([])
+        
+
+        const modules = useMemo(() => ({
+          toolbar: {
+            container: [
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+              ['bold', 'italic', 'underline', "strike"],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' },
+              { 'indent': '-1' }, { 'indent': '+1' }],
+              ['image', "link",'video'],
+              [{ 'color': ['#000000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'] }]
+            ],
+            
+          },
+        }), [])
+  
+      const handleQuill = (newValue) => {
+          setDescription(newValue)
+          if (newValue.trim() !== '') {
+              handleError('', 'description');
+          }
+      }
      
 
         const handleError=(error,label)=>{
@@ -57,14 +82,6 @@ var useStyles=makeStyles({
     
         const validation=()=>{
             var error=false
-            
-    
-            if (picture.filename.length==0)
-            {
-                error=true
-                handleError('Please upload Picture','picture')
-            }
-    
             if (!brandId)
             {
                 error=true
@@ -82,6 +99,23 @@ var useStyles=makeStyles({
               handleError('Please Select Product','productId')
               
             }
+            if(description.length==0)
+            {
+              error=true
+              handleError('Please Enter Description','description')
+              
+            }
+            if(files.length==0)
+            {
+                error=true
+                handleError('Please upload Picture','files')
+            }
+            if (price.length==0)
+            {
+              error=true
+              handleError('Please Enter Price','price')
+            }
+           
             return error
         }
     
@@ -137,19 +171,27 @@ var useStyles=makeStyles({
             fetchProductsByBrands(event.target.value)
           }
       
-        const handlePicture=(event)=>{
-         setPicture({bytes:event.target.files[0],filename:URL.createObjectURL(event.target.files[0])})
-        }
+       
     
         const handleSubmit=async()=>{
             var val=validation()
             if (val==false)
             {
           var formData=new FormData()
-          formData.append('productname',productName)
-          formData.append('picture',picture.bytes)
-          formData.append('categoryid', categoryId)
-          formData.append('brandid', brandId)
+            formData.append('productid',productId)
+            formData.append('categoryid', categoryId)
+            formData.append('brandid', brandId)
+            formData.append('description', description)
+            formData.append('modelno', modelNo)
+            formData.append('color', color)
+            formData.append('price', price)
+            formData.append('offerprice', offerPrice)
+            formData.append('stock', stock)
+            formData.append('status', status)
+            formData.append('hsncode', hsnCode)
+            files.map((file,index)=>{
+                formData.append('picture'+index, file)
+              })
     
           var response=await postData('productdetails/submit_productdetails',formData)
             if(response.status)
@@ -201,7 +243,7 @@ var useStyles=makeStyles({
             >
               {fillAllCategory()}
             </Select>
-            <FormHelperText style={{color:'#b71540'}}>{errors.categoryId}</FormHelperText>
+            <FormHelperText style={{color:'#FF0000'}}>{errors.categoryId}</FormHelperText>
           </FormControl>
                         </Grid>
     
@@ -219,7 +261,7 @@ var useStyles=makeStyles({
             >
               {fillAllBrands()}
             </Select>
-            <FormHelperText style={{color:'#b71540'}}>{errors.brandId}</FormHelperText>
+            <FormHelperText style={{color:'#FF0000'}}>{errors.brandId}</FormHelperText>
           </FormControl>
                         </Grid>
 
@@ -237,7 +279,7 @@ var useStyles=makeStyles({
             >
               {fillAllProducts()}
             </Select>
-            <FormHelperText style={{color:'#b71540'}}>{errors.productId}</FormHelperText>
+            <FormHelperText style={{color:'#FF0000'}}>{errors.productId}</FormHelperText>
           </FormControl>
                         </Grid>
     
@@ -246,8 +288,8 @@ var useStyles=makeStyles({
                 value={modelNo}
                 onChange={(event)=>setModelNo(event.target.value)}
                 onFocus={()=>handleError('','modelNo')}
-                error={errors.modelNo}
-                helperText={errors.modelNo}
+                error={errors?.modelNo}
+                helperText={errors?.modelNo}
                 label="Model No" fullWidth/>
               </Grid>
 
@@ -311,6 +353,30 @@ var useStyles=makeStyles({
                             </RadioGroup>
                         </FormControl>
                     </Grid>
+
+                    <Grid item xs={12}>
+                        <ReactQuill modules={modules} theme="snow" value={description} onChange={handleQuill} />
+                        <p style={{ color: '#FF0000', fontSize: '12.3px', marginLeft: '15px', marginTop: '0' }}>{errors.description}</p>
+                    </Grid>
+
+                    <Grid item xs={12} className={classes.center}>
+                    <div style={{width:'100%'}}>
+                    <DropzoneArea  acceptedFiles={['image/*']} dropzoneText={"Drag and drop an image here or click"}  onChange={(files) => setFiles(files)} filesLimit={7} fullWidth />  
+                     </div>      
+                    </Grid>
+                    <Grid item xs={12}>
+                        <p style={{ color: '#FF0000', fontSize: '12.3px', marginLeft: '15px', marginTop: '0' }}>{errors.files}</p>
+                    </Grid>
+
+
+                    <Grid item xs={6} className={classes.center}>
+                        <Button onClick={handleSubmit} variant="contained" fullWidth style={{ background: '#004cef', padding: '5% 0', fontWeight: '500' }}>Add</Button>
+                    </Grid>
+                    <Grid item xs={6} className={classes.center}>
+                        <Button onClick={handleReset} variant="contained" fullWidth style={{ background: '#004cef', padding: '5% 0', fontWeight: '500' }}>Reset</Button>
+                    </Grid>
+
+                    
 
 
               
